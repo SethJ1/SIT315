@@ -1,0 +1,42 @@
+const int tiltPin = 3;
+const int motionPin = 2;
+const int ledPin = 13;
+
+volatile int tiltState = LOW;
+volatile int motionState = LOW;
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(tiltPin, INPUT);
+  pinMode(motionPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+
+  attachInterrupt(digitalPinToInterrupt(tiltPin), tiltInterrupt, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(motionPin), motionInterrupt, CHANGE);
+}
+
+void loop() {
+//empty due to using the interrupt
+}
+
+void motionInterrupt() {
+  motionState = digitalRead(motionPin);
+
+  if (motionState == HIGH) {
+    digitalWrite(ledPin, HIGH);
+    Serial.println("Motion detected");
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+}
+  void tiltInterrupt() {
+  tiltState = digitalRead(tiltPin);
+
+  if (tiltState == HIGH) {
+    digitalWrite(ledPin, HIGH);
+    Serial.println("Tilt detected");
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+}
